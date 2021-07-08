@@ -61,6 +61,16 @@ func NewInsecureHTTPClient(tendermintRPCUrl string, strictGenesisParsing bool) *
 func (client *HTTPClient) Genesis() (*genesis.Genesis, error) {
 	var err error
 
+	// Note: this is for huge genesis response with timeout issue
+	//       init the response in json file
+	// jsonFile, err := os.Open("./genesis.json")
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// defer jsonFile.Close()
+
+	// genesis, err := ParseGenesisResp(jsonFile, client.strictGenesisParsing)
+
 	rawRespBody, err := client.request("genesis")
 	if err != nil {
 		return nil, err
