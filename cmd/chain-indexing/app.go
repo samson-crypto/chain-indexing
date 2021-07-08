@@ -91,7 +91,7 @@ func CliApp(args []string) error {
 		},
 		Action: func(ctx *cli.Context) error {
 			if args := ctx.Args(); args.Len() > 0 {
-				return fmt.Errorf("Unexpected arguments: %q", args.Get(0))
+				return fmt.Errorf("unexpected arguments: %q", args.Get(0))
 			}
 
 			// Prepare FileConfig
