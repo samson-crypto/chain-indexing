@@ -78,6 +78,7 @@ type BlockchainConfig struct {
 	ValidatorPubKeyPrefix  string `toml:"validator_pubkey_prefix"`
 	ConNodeAddressPrefix   string `toml:"connode_address_prefix"`
 	ConNodePubKeyPrefix    string `toml:"connode_pubkey_prefix"`
+	InitBlockHeight        int64  `toml:"init_block_height"`
 }
 
 type SystemConfig struct {

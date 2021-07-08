@@ -23,6 +23,7 @@ type SyncManager struct {
 	logger               applogger.Logger
 	pollingInterval      time.Duration
 	strictGenesisParsing bool
+	initBlockHeight      int64
 
 	accountAddressPrefix string
 	stakingDenom         string
@@ -50,6 +51,7 @@ type SyncManagerConfig struct {
 	TendermintRPCUrl         string
 	InsecureTendermintClient bool
 	StrictGenesisParsing     bool
+	initBlockHeight          int64
 
 	AccountAddressPrefix string
 	StakingDenom         string
@@ -81,6 +83,7 @@ func NewSyncManager(
 		}),
 		pollingInterval:      DEFAULT_POLLING_INTERVAL,
 		strictGenesisParsing: params.Config.StrictGenesisParsing,
+		initBlockHeight:      params.Config.initBlockHeight,
 
 		accountAddressPrefix: params.Config.AccountAddressPrefix,
 		stakingDenom:         params.Config.StakingDenom,
@@ -102,7 +105,7 @@ func (manager *SyncManager) SyncBlocks(latestHeight int64) error {
 	}
 
 	// if none of the block has been indexed before, start with 0
-	currentIndexingHeight := int64(0)
+	currentIndexingHeight := manager.initBlockHeight
 	if maybeLastIndexedHeight != nil {
 		currentIndexingHeight = *maybeLastIndexedHeight + 1
 	}
@@ -153,7 +156,7 @@ func (manager *SyncManager) syncBlockWorker(blockHeight int64) ([]command_entity
 
 	logger.Info("synchronizing block")
 
-	if blockHeight == int64(0) {
+	if blockHeight == manager.initBlockHeight {
 		genesis, err := manager.client.Genesis()
 		if err != nil {
 			return nil, fmt.Errorf("error requesting chain genesis: %v", err)

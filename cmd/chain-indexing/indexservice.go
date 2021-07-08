@@ -26,6 +26,7 @@ type IndexService struct {
 	tendermintHTTPRPCURL     string
 	insecureTendermintClient bool
 	strictGenesisParsing     bool
+	initBlockHeight          int64
 }
 
 // NewIndexService creates a new server instance for polling and indexing
@@ -44,6 +45,7 @@ func NewIndexService(
 		consNodeAddressPrefix:    config.Blockchain.ConNodeAddressPrefix,
 		accountAddressPrefix:     config.Blockchain.AccountAddressPrefix,
 		bondingDenom:             config.Blockchain.BondingDenom,
+		initBlockHeight:          config.Blockchain.InitBlockHeight,
 		windowSize:               config.Sync.WindowSize,
 		tendermintHTTPRPCURL:     config.Tendermint.HTTPRPCUrl,
 		insecureTendermintClient: config.Tendermint.Insecure,
@@ -84,7 +86,7 @@ func (service *IndexService) RunEventStoreMode() error {
 			return fmt.Errorf("error registering projection `%s` to manager %v", projection.Id(), err)
 		}
 	}
-	projectionManager.RunInBackground()
+	// projectionManager.RunInBackground()
 
 	eventStoreHandler := eventhandler_interface.NewRDbEventStoreHandler(
 		service.logger,
@@ -102,6 +104,7 @@ func (service *IndexService) RunEventStoreMode() error {
 				TendermintRPCUrl:         service.tendermintHTTPRPCURL,
 				InsecureTendermintClient: service.insecureTendermintClient,
 				StrictGenesisParsing:     service.strictGenesisParsing,
+				initBlockHeight:          service.initBlockHeight,
 				AccountAddressPrefix:     service.accountAddressPrefix,
 				StakingDenom:             service.bondingDenom,
 			},
