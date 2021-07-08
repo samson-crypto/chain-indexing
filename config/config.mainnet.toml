@@ -6,6 +6,7 @@ validator_address_prefix = "crocncl"
 validator_pubkey_prefix = "crocncl"
 connode_address_prefix = "crocnclcons"
 connode_pubkey_prefix = "crocnclconspub"
+init_block_height = 0
 
 [system]
 # mode of the system, possible values: EVENT_STORE,TENDERMINT_DIRECT
